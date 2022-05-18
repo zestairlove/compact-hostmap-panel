@@ -1,68 +1,32 @@
 import React from 'react';
-import { PanelProps } from '@grafana/data';
-import { SimpleOptions } from 'types';
 import { css, cx } from 'emotion';
-import { stylesFactory, useTheme } from '@grafana/ui';
+import { useTheme2, useStyles2 } from '@grafana/ui';
+import type { PanelProps, GrafanaTheme2 } from '@grafana/data';
+
+import type { SimpleOptions } from 'types';
 
 interface Props extends PanelProps<SimpleOptions> {}
 
-export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) => {
-  const theme = useTheme();
-  const styles = getStyles();
-  return (
-    <div
-      className={cx(
-        styles.wrapper,
-        css`
-          width: ${width}px;
-          height: ${height}px;
-        `
-      )}
-    >
-      <svg
-        className={styles.svg}
-        width={width}
-        height={height}
-        xmlns="http://www.w3.org/2000/svg"
-        xmlnsXlink="http://www.w3.org/1999/xlink"
-        viewBox={`-${width / 2} -${height / 2} ${width} ${height}`}
-      >
-        <g>
-          <circle style={{ fill: `${theme.isLight ? theme.palette.greenBase : theme.palette.blue95}` }} r={100} />
-        </g>
-      </svg>
+export const SimplePanel: React.FC<Props> = ({ data, width, height }) => {
+  const theme = useTheme2();
+  const styles = useStyles2(getStyles(width, height));
 
-      <div className={styles.textBox}>
-        {options.showSeriesCount && (
-          <div
-            className={css`
-              font-size: ${theme.typography.size[options.seriesCountSize]};
-            `}
-          >
-            Number of series: {data.series.length}
-          </div>
-        )}
-        <div>Text option value: {options.text}</div>
-      </div>
-    </div>
-  );
+  console.log('data', data);
+
+  return <div className={styles.wrapper}>test</div>;
 };
 
-const getStyles = stylesFactory(() => {
-  return {
+const getStyles = (width: number, height: number) => {
+  return (theme: GrafanaTheme2) => ({
     wrapper: css`
       position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: ${width}px;
+      height: ${height}px;
+      overflow-y: auto;
+      color: ${theme.colors.text.primary};
     `,
-    svg: css`
-      position: absolute;
-      top: 0;
-      left: 0;
-    `,
-    textBox: css`
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      padding: 10px;
-    `,
-  };
-});
+  });
+};

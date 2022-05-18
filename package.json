@@ -17,7 +17,14 @@
     "@grafana/data": "latest",
     "@grafana/toolkit": "latest",
     "@grafana/ui": "latest",
-    "emotion": "10.0.27"
+    "emotion": "10.0.27",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react-hooks": "^4.5.0",
+    "eslint-plugin-testing-library": "^5.5.0"
   },
   "engines": {
     "node": ">=14"
