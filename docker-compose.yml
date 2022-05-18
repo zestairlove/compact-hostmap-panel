@@ -1,0 +1,14 @@
+version: '3.0'
+
+services:
+  grafana:
+    container_name: compact-hostmap-panel
+    build:
+      context: .
+      args:
+        grafana_version: ${GRAFANA_VERSION}
+    ports:
+      - 3100:3000/tcp
+    volumes:
+      - ./dist:/var/lib/grafana/plugins/compact-hostmap-panel
+      #- ./provisioning:/etc/grafana/provisioning
