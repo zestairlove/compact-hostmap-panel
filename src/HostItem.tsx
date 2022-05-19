@@ -3,18 +3,33 @@ import type { DataFrame, GrafanaTheme2 } from '@grafana/data';
 import { css, cx } from 'emotion';
 import { useTheme2, useStyles2 } from '@grafana/ui';
 
-import { getValueField, getMeanValue } from './utils/grafanaHelper';
+import { getValueField, getMeanValue, formatDisplayValue } from './utils/grafanaHelper';
 import HostItemTooltip from './HostItemTooltip';
+
+type ItemStyle = {
+  type: 'xl' | 'lg' | 'md' | 'sm' | 'xs';
+  width: number;
+  borderRadius: string;
+};
+
+export const ITEM_STYLES: ItemStyle[] = [
+  { type: 'xl', width: 52, borderRadius: '4px' },
+  { type: 'lg', width: 44, borderRadius: '4px' },
+  { type: 'md', width: 36, borderRadius: '3px' },
+  { type: 'sm', width: 28, borderRadius: '3px' },
+  { type: 'xs', width: 20, borderRadius: '2px' },
+];
 
 interface HostItemProps {
   name: string;
   dataFrames: DataFrame[];
   itemIndex: number;
+  itemStyle: ItemStyle;
 }
 
-const HostItem: React.FC<HostItemProps> = ({ name, dataFrames, itemIndex }) => {
+const HostItem: React.FC<HostItemProps> = ({ name, dataFrames, itemIndex, itemStyle }) => {
   const theme = useTheme2();
-  const styles = useStyles2(getStyles);
+  const styles = useStyles2(getStyles(itemStyle));
 
   const linkInfo = useMemo(() => {
     let _linkInfo = null;
@@ -27,7 +42,7 @@ const HostItem: React.FC<HostItemProps> = ({ name, dataFrames, itemIndex }) => {
     return _linkInfo;
   }, [dataFrames, itemIndex]);
 
-  const renderItem = () => {
+  const renderInner = () => {
     const valueFields = dataFrames.map(({ fields }) => fields.find(getValueField));
 
     const meanValues = valueFields.map((valueField) => {
@@ -40,7 +55,7 @@ const HostItem: React.FC<HostItemProps> = ({ name, dataFrames, itemIndex }) => {
 
     if (!maxDisplayValue) {
       return (
-        <div>
+        <div className={styles.full}>
           <span className={styles['sr-only']}>No Data</span>
         </div>
       );
@@ -49,42 +64,79 @@ const HostItem: React.FC<HostItemProps> = ({ name, dataFrames, itemIndex }) => {
     return (
       <div
         className={cx(
-          styles.hostItem,
+          'item-inset',
           css`
-            background-color: ${maxDisplayValue.color};
+            background-color: ${theme.colors.background.primary};
           `
         )}
       >
-        <span className={styles['sr-only']}>{name}</span>
+        <div
+          className={cx(
+            'item-inset-2nd',
+            css`
+              background: ${maxDisplayValue.color ?? 'none'};
+            `
+          )}
+        >
+          <span className="dot">...</span>
+          <span className={styles['sr-only']}>{formatDisplayValue(maxDisplayValue)}</span>
+        </div>
       </div>
     );
   };
 
   return (
     <HostItemTooltip name={name} dataFrames={dataFrames}>
-      {linkInfo && linkInfo.length > 0 ? (
-        <a
-          href={linkInfo[0].href}
-          target={linkInfo[0].target}
-          rel={linkInfo[0].target === '_blank' ? 'noreferrer' : undefined}
-        >
-          {renderItem()}
-        </a>
-      ) : (
-        renderItem()
-      )}
+      <div className={styles.hostItem}>
+        {linkInfo && linkInfo.length > 0 ? (
+          <a
+            href={linkInfo[0].href}
+            target={linkInfo[0].target}
+            rel={linkInfo[0].target === '_blank' ? 'noreferrer' : undefined}
+          >
+            {renderInner()}
+          </a>
+        ) : (
+          renderInner()
+        )}
+      </div>
     </HostItemTooltip>
   );
 };
 
-const getStyles = (theme: GrafanaTheme2) => ({
+const getStyles = (itemStyle: ItemStyle) => (theme: GrafanaTheme2) => ({
+  full: css`
+    width: 100%;
+    height: 100%;
+  `,
   hostItem: css`
     position: relative;
-    width: 40px;
-    height: 40px;
+    width: ${itemStyle.width}px;
+    height: ${itemStyle.width}px;
     text-align: center;
-    border: 1px solid ${theme.colors.border.medium};
     color: ${theme.colors.text.primary};
+    .item-inset {
+      position: absolute;
+      inset: ${itemStyle.borderRadius};
+      border: 1px solid ${theme.colors.border.medium};
+      border-radius: ${itemStyle.borderRadius};
+      box-shadow: ${theme.shadows.z1};
+    }
+    .item-inset-2nd {
+      position: absolute;
+      inset: 0 0 2px;
+      overflow: hidden;
+      border-radius: ${itemStyle.borderRadius};
+    }
+    .dot {
+      display: ${itemStyle.type === 'xs' ? 'none' : 'block'};
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      line-height: 1;
+      margin-top: -5px;
+    }
   `,
   'sr-only': css`
     clip: rect(0 0 0 0);
