@@ -21,5 +21,7 @@ module.exports = {
     'plugin:jsx-a11y/recommended',
     'plugin:prettier/recommended',
   ],
-  rules: {},
+  rules: {
+    '@typescript-eslint/no-empty-interface': false,
+  },
 };
