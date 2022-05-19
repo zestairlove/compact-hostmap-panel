@@ -5,6 +5,7 @@ import { useTheme2, useStyles2 } from '@grafana/ui';
 
 import { getValueField, getMeanValue, formatDisplayValue } from './utils/grafanaHelper';
 import HostItemTooltip from './HostItemTooltip';
+import { transformColor } from './utils/colors';
 
 type ItemStyle = {
   type: 'xl' | 'lg' | 'md' | 'sm' | 'xs';
@@ -66,7 +67,9 @@ const HostItem: React.FC<HostItemProps> = ({ name, dataFrames, itemIndex, itemSt
         className={cx(
           'item-inset',
           css`
-            background-color: ${theme.colors.background.primary};
+            background-color: ${maxDisplayValue.color
+              ? transformColor(maxDisplayValue.color, -10)
+              : theme.colors.background.primary};
           `
         )}
       >
@@ -78,7 +81,16 @@ const HostItem: React.FC<HostItemProps> = ({ name, dataFrames, itemIndex, itemSt
             `
           )}
         >
-          <span className="dot">...</span>
+          <span
+            className={cx(
+              'dot',
+              css`
+                color: ${maxDisplayValue.color ? theme.colors.getContrastText(maxDisplayValue.color) : undefined};
+              `
+            )}
+          >
+            ...
+          </span>
           <span className={styles['sr-only']}>{formatDisplayValue(maxDisplayValue)}</span>
         </div>
       </div>
@@ -118,7 +130,7 @@ const getStyles = (itemStyle: ItemStyle) => (theme: GrafanaTheme2) => ({
     .item-inset {
       position: absolute;
       inset: ${itemStyle.borderRadius};
-      border: 1px solid ${theme.colors.border.medium};
+      border: 1px solid ${theme.colors.border.weak};
       border-radius: ${itemStyle.borderRadius};
       box-shadow: ${theme.shadows.z1};
     }
