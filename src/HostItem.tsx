@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import type { DataFrame, GrafanaTheme2 } from '@grafana/data';
 import { css, cx } from 'emotion';
 import { useTheme2, useStyles2 } from '@grafana/ui';
@@ -15,6 +15,17 @@ interface HostItemProps {
 const HostItem: React.FC<HostItemProps> = ({ name, dataFrames, itemIndex }) => {
   const theme = useTheme2();
   const styles = useStyles2(getStyles);
+
+  const linkInfo = useMemo(() => {
+    let _linkInfo = null;
+    const firstValueField = dataFrames[0].fields.find(getValueField);
+
+    if (typeof firstValueField?.getLinks === 'function') {
+      _linkInfo = firstValueField.getLinks({ valueRowIndex: itemIndex });
+    }
+
+    return _linkInfo;
+  }, [dataFrames, itemIndex]);
 
   const renderItem = () => {
     const valueFields = dataFrames.map(({ fields }) => fields.find(getValueField));
@@ -51,7 +62,17 @@ const HostItem: React.FC<HostItemProps> = ({ name, dataFrames, itemIndex }) => {
 
   return (
     <HostItemTooltip name={name} dataFrames={dataFrames}>
-      {renderItem()}
+      {linkInfo && linkInfo.length > 0 ? (
+        <a
+          href={linkInfo[0].href}
+          target={linkInfo[0].target}
+          rel={linkInfo[0].target === '_blank' ? 'noreferrer' : undefined}
+        >
+          {renderItem()}
+        </a>
+      ) : (
+        renderItem()
+      )}
     </HostItemTooltip>
   );
 };
