@@ -11,4 +11,4 @@ services:
       - 3100:3000/tcp
     volumes:
       - ./dist:/var/lib/grafana/plugins/compact-hostmap-panel
-      #- ./provisioning:/etc/grafana/provisioning
+      - ./provisioning:/etc/grafana/provisioning
