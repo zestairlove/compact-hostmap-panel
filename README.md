@@ -1,44 +1,23 @@
-# Grafana Panel Plugin Template
+# Compact Hostmap Panel for Grafana
 
-[![Build](https://github.com/grafana/grafana-starter-panel/workflows/CI/badge.svg)](https://github.com/grafana/grafana-starter-panel/actions?query=workflow%3A%22CI%22)
+Grafana Panel Plugin to easily understand the host's system metric at a glance
 
-This template is a starting point for building Grafana Panel Plugins in Grafana 7.0+
+<img width="1081" alt="Screenshot_2022-05-20_16-59-14" src="https://user-images.githubusercontent.com/24940457/169499252-a461fbd3-43b6-474e-ae9c-f6aa2da8a521.png">
 
-## What is Grafana Panel Plugin?
+## Supported Datasources
 
-Panels are the building blocks of Grafana. They allow you to visualize data in different ways. While Grafana has several types of panels already built-in, you can also build your own panel, to add support for other visualizations.
+- promethues
+- elasticsearch
 
-For more information about panels, refer to the documentation on [Panels](https://grafana.com/docs/grafana/latest/features/panels/panels/)
+tested.
 
-## Getting started
+Supports Grafana plugin interface data frames, groupBy each frame based on `name` key.
 
-1. Install dependencies
+<img width="966" alt="Screenshot_2022-05-20_18-24-46" src="https://user-images.githubusercontent.com/24940457/169500225-c5f89483-fdab-4798-8933-4df6521c7598.png">
+<img width="963" alt="Screenshot_2022-05-20_18-25-13" src="https://user-images.githubusercontent.com/24940457/169500261-fa9db043-325b-40ba-8eeb-4f425bf9c724.png">
 
-   ```bash
-   yarn install
-   ```
+## ETC
 
-2. Build plugin in development mode or run in watch mode
+HostItem is rendered in response to panel size, and Color Threshold is mapped to the largest value.
 
-   ```bash
-   yarn dev
-   ```
-
-   or
-
-   ```bash
-   yarn watch
-   ```
-
-3. Build plugin in production mode
-
-   ```bash
-   yarn build
-   ```
-
-## Learn more
-
-- [Build a panel plugin tutorial](https://grafana.com/tutorials/build-a-panel-plugin)
-- [Grafana documentation](https://grafana.com/docs/)
-- [Grafana Tutorials](https://grafana.com/tutorials/) - Grafana Tutorials are step-by-step guides that help you make the most of Grafana
-- [Grafana UI Library](https://developers.grafana.com/ui) - UI components to help you build interfaces using Grafana Design System
+<img width="1040" alt="Screenshot_2022-05-20_18-23-49" src="https://user-images.githubusercontent.com/24940457/169500959-910ca82b-5561-493b-9fb7-5d41fa221973.png">
