@@ -22,6 +22,6 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   rules: {
-    '@typescript-eslint/no-empty-interface': false,
+    '@typescript-eslint/no-empty-interface': 'off',
   },
 };
