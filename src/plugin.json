@@ -2,16 +2,14 @@
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
   "type": "panel",
   "name": "compact-hostmap-panel",
-  "id": "heimdall-compact-hostmap-panel",
+  "id": "zestairlove-compact-hostmap-panel",
   "info": {
     "description": "Grafana Compact Hostmap Panel Plugin ",
     "author": {
       "name": "zestairlove",
       "url": ""
     },
-    "keywords": [
-      "hostmap"
-    ],
+    "keywords": ["hostmap"],
     "logos": {
       "small": "img/logo.svg",
       "large": "img/logo.svg"
