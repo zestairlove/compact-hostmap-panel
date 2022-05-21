@@ -1,7 +1,7 @@
 // @link https://gist.github.com/lugin-dev/1341df8b1ceb12b933ff0af276271572
-export function transformColor(color: string, percent: number) {
+export function transformColor(color: string, percent: number): string {
   if (color[0] == '#') color = color.slice(1);
-  let num = parseInt(color, 16),
+  const num = parseInt(color, 16),
     amt = Math.round(2.55 * percent),
     R = (num >> 16) + amt,
     B = ((num >> 8) & 0x00ff) + amt,

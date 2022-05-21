@@ -23,5 +23,7 @@ module.exports = {
   ],
   rules: {
     '@typescript-eslint/no-empty-interface': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
   },
 };

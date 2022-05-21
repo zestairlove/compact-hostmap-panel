@@ -44,7 +44,7 @@ const HostList: React.FC<HostListProps> = ({ data, width, height }) => {
       }
     }
     return { listWidth: _listWidth, listHeight: _listHeight, itemStyle: _itemStyle };
-  }, [width, height, data]);
+  }, [width, height, entries.length]);
 
   return (
     <div

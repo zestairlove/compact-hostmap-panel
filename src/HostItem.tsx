@@ -6,6 +6,7 @@ import { useTheme2, useStyles2 } from '@grafana/ui';
 import { getValueField, getMeanValue, formatDisplayValue } from './utils/grafanaHelper';
 import HostItemTooltip from './HostItemTooltip';
 import { transformColor } from './utils/colors';
+import { nonNullable } from './utils/typeHelpers';
 
 type ItemStyle = {
   type: 'xl' | 'lg' | 'md' | 'sm' | 'xs';
@@ -46,9 +47,11 @@ const HostItem: React.FC<HostItemProps> = ({ name, dataFrames, itemIndex, itemSt
   const renderInner = () => {
     const valueFields = dataFrames.map(({ fields }) => fields.find(getValueField));
 
-    const meanValues = valueFields.map((valueField) => {
-      return valueField ? getMeanValue(valueField) : null;
-    });
+    const meanValues = valueFields
+      .map((valueField) => {
+        return valueField ? getMeanValue(valueField) : null;
+      })
+      .filter(nonNullable);
 
     const maxIndex = meanValues.indexOf(Math.max(...meanValues));
 
