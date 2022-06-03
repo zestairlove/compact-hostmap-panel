@@ -27,19 +27,19 @@
     "screenshots": [
       {
         "name": "screenshot1",
-        "path": "./img/screenshot1.png"
+        "path": "img/screenshot1.png"
       },
       {
         "name": "screenshot2",
-        "path": "./img/screenshot2.png"
+        "path": "img/screenshot2.png"
       },
       {
         "name": "screenshot3",
-        "path": "./img/screenshot3.png"
+        "path": "img/screenshot3.png"
       },
       {
         "name": "screenshot4",
-        "path": "./img/screenshot4.png"
+        "path": "img/screenshot4.png"
       }
     ],
     "version": "%VERSION%",
