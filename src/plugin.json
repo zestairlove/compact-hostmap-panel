@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
   "type": "panel",
-  "name": "compact-hostmap-panel",
+  "name": "Compact Hostmap Panel",
   "id": "zestairlove-compacthostmap-panel",
   "info": {
     "description": "Grafana Compact Hostmap Panel Plugin",
@@ -9,19 +9,19 @@
       "name": "zestairlove",
       "url": "https://github.com/zestairlove/compact-hostmap-panel"
     },
-    "keywords": ["hostmap"],
+    "keywords": ["hostmap", "panel"],
     "logos": {
       "small": "img/logo.svg",
       "large": "img/logo.svg"
     },
     "links": [
       {
-        "name": "Website",
-        "url": "https://github.com/grafana/grafana-starter-panel"
+        "name": "Github",
+        "url": "https://github.com/zestairlove/compact-hostmap-panel"
       },
       {
         "name": "License",
-        "url": "https://github.com/grafana/grafana-starter-panel/blob/master/LICENSE"
+        "url": "https://github.com/zestairlove/compact-hostmap-panel/blob/main/LICENSE"
       }
     ],
     "screenshots": [
