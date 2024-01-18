@@ -1,8 +1,7 @@
 import React from 'react';
-import type { PanelProps, GrafanaTheme2 } from '@grafana/data';
+import type { PanelProps, GrafanaTheme2, DataFrame } from '@grafana/data';
 import { css, cx } from 'emotion';
 import { useTheme2, useStyles2, Tooltip, Alert, VerticalGroup } from '@grafana/ui';
-import groupBy from 'lodash/groupBy';
 
 import type { SimpleOptions } from './types';
 import HostList from './HostList';
@@ -13,11 +12,26 @@ export const SimplePanel: React.FC<Props> = ({ data, width, height }) => {
   const theme = useTheme2();
   const styles = useStyles2(getStyles(width, height));
 
-  const hasDisplayNameFromDS = data.series.some((val) => {
-    return val.fields.length > 0 && val.fields[1]?.config?.displayNameFromDS;
-  });
+  /**
+   * groupBy key can be
+   * - data.series[0].name
+   * - data.series[0].fields[1].config.displayName
+   * - data.series[0].fields[1].config.displayNameFromDS
+   */
 
-  if (!hasDisplayNameFromDS) {
+  const dataFramesGroupByName = data.series.reduce<Record<string, DataFrame[]>>((acc, cur) => {
+    const name = cur.name || cur.fields[1]?.config?.displayName || cur.fields[1]?.config?.displayNameFromDS || 'noData';
+    acc[name] = acc[name] ? acc[name].concat(cur) : [cur];
+    return acc;
+  }, {});
+
+  const noDataFrames = dataFramesGroupByName.noData;
+  const noDataFramesLength = noDataFrames?.length || 0;
+  delete dataFramesGroupByName.noData;
+
+  const hasDataToDisplay = Object.keys(dataFramesGroupByName).length > 0;
+
+  if (!hasDataToDisplay) {
     return (
       <div className={styles.wrapper}>
         <div
@@ -31,8 +45,11 @@ export const SimplePanel: React.FC<Props> = ({ data, width, height }) => {
           <Alert title="There is no data to display." severity="warning">
             <VerticalGroup>
               <div>
-                Please check if you have correctly entered the Legend value as a custom option in the queryEditor
-                options. ex) {`{{hostName}} or {{instance}}`}
+                (Prometheus)Please check if you have correctly entered the Legend value as a custom option in the
+                queryEditor options. ex) {`{{hostName}} or {{instance}}`}
+              </div>
+              <div>
+                or the response series from the datasource you are using must have a key to be used as the name.
               </div>
             </VerticalGroup>
           </Alert>
@@ -40,13 +57,6 @@ export const SimplePanel: React.FC<Props> = ({ data, width, height }) => {
       </div>
     );
   }
-
-  const dataFramesGroupByName = groupBy(data.series, 'fields[1].config.displayNameFromDS');
-
-  const noDataFrames = dataFramesGroupByName.undefined;
-  const noDataFramesLength = noDataFrames?.length || 0;
-
-  delete dataFramesGroupByName.undefined;
 
   return (
     <div className={styles.wrapper}>
@@ -61,7 +71,7 @@ export const SimplePanel: React.FC<Props> = ({ data, width, height }) => {
             </div>
           }
         >
-          <div className={styles.noDataFrame}>No DataQuery: {noDataFramesLength}</div>
+          <div className={styles.noDataFrame}>No Data: {noDataFramesLength}</div>
         </Tooltip>
       )}
     </div>

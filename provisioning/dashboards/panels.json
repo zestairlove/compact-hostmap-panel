@@ -145,7 +145,7 @@
         }
       ],
       "title": "Panel Title",
-      "type": "zestairlove-compact-hostmap-panel"
+      "type": "zestairlove-compacthostmap-panel"
     }
   ],
   "refresh": "",
